@@ -1,0 +1,20 @@
+import pandas as pd
+path="C:\\Users\\Lenovo\\Desktop\\yb ka\\Advertising.csv"
+data=pd.read_csv(path)
+print(data)
+print(data.info())
+
+inputs=data.drop(['Unnamed: 0','Sales'],'columns')
+output=data.drop(['Unnamed: 0','TV','Radio','Newspaper'],'columns')
+print(inputs)
+print(output)
+
+import sklearn
+from sklearn import linear_model
+model=linear_model.LinearRegression()
+model.fit(inputs,output)
+res=model.predict([[44.5,39.3,45.1]])
+print(res)
+
+acc=model.score(inputs,output)*100
+print(acc)

@@ -1,0 +1,38 @@
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.impute import SimpleImputer
+
+path = 'C:\\Users\\Lenovo\\Desktop\\yb ka\\tested.csv'
+data = pd.read_csv(path)
+
+le_sex = LabelEncoder()
+le_Embarked = LabelEncoder()
+data['sex_n'] = le_sex.fit_transform(data['Sex'])
+data['Embarked_n'] = le_Embarked.fit_transform(data['Embarked'])
+
+# Impute missing values
+imputer = SimpleImputer(strategy='mean')
+data[['Pclass', 'SibSp', 'Parch', 'Fare', 'sex_n', 'Embarked_n']] = imputer.fit_transform(
+    data[['Pclass', 'SibSp', 'Parch', 'Fare', 'sex_n', 'Embarked_n']]
+)
+
+inputs = data.drop(['PassengerId', 'Age', 'Sex', 'Survived', 'Name', 'Ticket', 'Embarked', 'Cabin'], axis=1)
+output = data['Survived']
+
+scaler = StandardScaler()
+inputs_scaled = scaler.fit_transform(inputs)
+
+x_train, x_test, y_train, y_test = train_test_split(inputs_scaled, output, test_size=0.2)
+
+model = KNeighborsClassifier()
+model.fit(x_train, y_train)
+y_pred = model.predict(x_test)
+
+# Use actual values or variables for prediction
+res = model.predict([[3.0,1.0,0.0,7.0000,0.0,2.0]])  # Update with actual scaled values
+if res == 0:
+    print('Not Survived')
+else:
+    print('Survived')

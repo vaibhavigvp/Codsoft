@@ -1,0 +1,39 @@
+import pandas as pd
+
+path = "C:\\Users\\Lenovo\\Desktop\\yb ka\\Iris.csv"
+
+data = pd.read_csv(path)
+print(data)
+print(data.info())
+
+inputs = data.drop(['Id','Species'],'columns')
+output = data.drop(['Id','SepalLengthCm','SepalWidthCm','PetalLengthCm','PetalWidthCm'],'columns')
+print(inputs)
+print(output)
+
+import sklearn
+from sklearn.model_selection import train_test_split
+
+x_train,x_test,y_train,y_test = train_test_split(inputs,output,test_size=0.2)
+
+from sklearn.neighbors import KNeighborsClassifier
+
+model = KNeighborsClassifier(n_neighbors=13) #intialing the model sqrt(n) - n is no of rows
+
+model.fit(x_train,y_train) #training
+
+y_pred = model.predict(x_test)
+print(y_pred)
+print(y_test)
+
+from sklearn.metrics import confusion_matrix
+
+cm = confusion_matrix(y_test,y_pred) #actual values , predicted values
+
+print(cm)
+
+res = model.predict([[2.1,1.1,3.2,1.1]]) 
+print(res)
+
+res = model.predict([[1.2,1.1,1.2,0.5]]) 
+print(res)
